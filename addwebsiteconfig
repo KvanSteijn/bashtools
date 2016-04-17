@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Check the first argument
+if [ "$1" == "" ]; then
+    echo "Website name is empty"
+    exit
+fi
+
+# Set some values
+SCRIPTPATH=`pwd -P`
+CONFIGPATH="$SCRIPTPATH/configs/nginx"
+WEBSITENAME="$1"
+
+# Get the extension
+if [ "$2" == "" ]; then
+    EXTENSION="com"
+else
+    EXTENSION="$2"
+fi
+
+# Get the website type
+if [ "$3" == "" ]; then
+    WEBSITETYPE="default"
+else
+    WEBSITETYPE="$3"
+fi
+
+# Get the HTTP state
+if [ "$4" == "https" ]; then
+    HTTPS="true"
+else
+    HTTPS="false"
+fi
+
+# Check HTTPS setting
+if [ "$HTTPS" == "true" ]; then
+	echo "HTTPS not supported, fall back to HTTP"
+	HTTPS="false"
+fi
+
+# Get the config file
+if [ "$HTTPS" == "true" ]; then
+	CONFIGFILE=$WEBSITETYPE"_https.conf"
+	CONFIGDEFAULTFILE="default_https.conf"
+else
+	CONFIGFILE=$WEBSITETYPE"_http.conf"
+	CONFIGDEFAULTFILE="default_http.conf"
+fi
+
+# Check if the config file exists
+if [ ! -f "$CONFIGPATH/$CONFIGFILE" ]; then
+	echo "Website type not exists, fall back to default"
+	CONFIGFILE="$CONFIGDEFAULTFILE"
+fi
+
+echo "$CONFIGPATH/$CONFIGFILE"
+
+# Create Nginx config
+echo "Creating Nginx config file"
+sed "s/WEBSITE/$WEBSITENAME/g" "$CONFIGPATH/$CONFIGFILE" > "/etc/nginx/sites-available/$WEBSITENAME"
+
+# Set the extension
+echo "Set the extension (.$EXTENSION)"
+sed -i -e "s/EXTENSION/$EXTENSION/g" "/etc/nginx/sites-available/$WEBSITENAME"
+

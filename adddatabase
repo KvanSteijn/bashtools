@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Check the first argument
+if [ "$1" == "" ]; then
+    echo "Database name is empty"
+    exit
+fi
+
+# Set some values
+DATABASENAME="$1"
+
+# Get the username
+if [ "$2" == "" ]; then
+    USERNAME="$DATABASENAME"
+else
+    USERNAME="$2"
+fi
+
+# Get the password
+PASSWORDEMPTY=1
+while [ "$PASSWORDEMPTY" -eq 1 ]; do
+    # Get the password
+    read -s -p "Database password:" PASSWORD
+
+    # Check if the password is empty
+    if [ "$PASSWORD" == "" ]; then
+        echo "Password is empty"
+    else
+        PASSWORDEMPTY=0
+    fi
+done
+
+# Create the database
+echo "Creating database user and database"
+mysql --defaults-file=/etc/mysql/debian.cnf --execute="CREATE USER '$USERNAME'@'localhost' IDENTIFIED BY '$PASSWORD';"
+mysql --defaults-file=/etc/mysql/debian.cnf --execute="CREATE DATABASE IF NOT EXISTS $DATABASENAME;"
+mysql --defaults-file=/etc/mysql/debian.cnf --execute="GRANT ALL PRIVILEGES ON $DATABASENAME.* TO '$USERNAME'@'localhost' IDENTIFIED BY '$PASSWORD';"

@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Check the first argument
+if [ "$1" == "" ]; then
+    echo "Website name is empty"
+    exit
+fi
+
+# Set some values
+SCRIPTPATH=`pwd -P`
+WEBSITENAME="$1"
+
+# Get the extension
+if [ "$2" == "" ]; then
+    EXTENSION="com"
+else
+    EXTENSION="$2"
+fi
+
+# Get the website type
+if [ "$3" == "" ]; then
+    WEBSITETYPE="default"
+else
+    WEBSITETYPE="$3"
+fi
+
+# Get the HTTP state
+if [ "$4" == "https" ]; then
+    HTTPS="https"
+else
+    HTTPS=""
+fi
+
+# Check if the website already exists
+if [ -d "/home/$WEBSITENAME/" ]; then
+    echo "Website already exists, stop bash script"
+    exit
+fi
+
+# Add the user
+echo "Creating user without shell access"
+useradd -m -s /usr/sbin/nologin "$WEBSITENAME"
+
+# Create www dir
+echo "Creating www dir"
+mkdir "/home/$WEBSITENAME/www"
+chown "$WEBSITENAME":"$WEBSITENAME" "/home/$WEBSITENAME/www"
+
+# Create database
+./adddatabase "$WEBSITENAME"
+
+# Create PHP-FPM pool
+echo "Creating PHP-FPM pool"
+sed "s/WEBSITE/$WEBSITENAME/g" "$SCRIPTPATH/configs/pool.conf" > "/etc/php5/fpm/pool.d/$WEBSITENAME.conf"
+
+./addwebsiteconfig "$WEBSITENAME" "$EXTENSION" "$WEBSITETYPE" "$HTTPS"
+
+# Symlink config file
+echo "Symlink Nginx config file"
+ln -s "/etc/nginx/sites-available/$WEBSITENAME" "/etc/nginx/sites-enabled/$WEBSITENAME"
+
