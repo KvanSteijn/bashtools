@@ -10,7 +10,7 @@ cd bashtools
 
 Chmod the bash files
 ```
-chmod u+x addwebsite addwebsiteconfig adddatabase
+chmod u+x addwebsite addwebsiteconfig adddatabase enablewebsite disablewebsite
 ```
 
 # Create website
