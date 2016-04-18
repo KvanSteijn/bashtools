@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Check the first argument
+if [ "$1" == "" ]; then
+    echo "Website name is empty"
+    exit
+fi
+
+# Set some values
+WEBSITENAME="$1"
+AVAILABLEPATH="/etc/nginx/sites-available/$WEBSITENAME"
+ENABLEDPATH="/etc/nginx/sites-enabled/$WEBSITENAME"
+
+# Check if the website exists
+if [ ! -f "$AVAILABLEPATH" ]; then
+    echo "Website not exists, stop bash script"
+    exit
+fi
+
+echo "Enable website"
+ln -s "$AVAILABLEPATH" "$ENABLEDPATH"
