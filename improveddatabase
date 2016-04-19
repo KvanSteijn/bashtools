@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Analyze all tables in all databases
+echo "Analyze all tables in all databases"
+mysqlcheck --defaults-file=/etc/mysql/debian.cnf -Aa
+
+# Optimize all tables in all databases
+echo "Optimize all tables in all databases"
+mysqlcheck --defaults-file=/etc/mysql/debian.cnf -Ao
