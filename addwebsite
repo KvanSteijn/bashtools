@@ -53,9 +53,8 @@ chown "$WEBSITENAME":"$WEBSITENAME" "/home/$WEBSITENAME/www"
 echo "Creating PHP-FPM pool"
 sed "s/WEBSITE/$WEBSITENAME/g" "$SCRIPTPATH/configs/pool.conf" > "/etc/php5/fpm/pool.d/$WEBSITENAME.conf"
 
+# Create website config
 ./addwebsiteconfig "$WEBSITENAME" "$EXTENSION" "$WEBSITETYPE" "$HTTPS"
 
-# Symlink config file
-echo "Symlink Nginx config file"
-ln -s "/etc/nginx/sites-available/$WEBSITENAME" "/etc/nginx/sites-enabled/$WEBSITENAME"
-
+# Enable website
+./enablewebsite "$WEBSITENAME"

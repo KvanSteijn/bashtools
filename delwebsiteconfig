@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Check the first argument
+if [ "$1" == "" ]; then
+    echo "Website name is empty"
+    exit
+fi
+
+# Set some values
+SCRIPTPATH=`pwd -P`
+WEBSITENAME="$1"
+AVAILABLEPATH="/etc/nginx/sites-available/$WEBSITENAME"
+
+# Check if the website exists
+if [ ! -f "$AVAILABLEPATH" ]; then
+    echo "Website not exists, stop bash script"
+    exit
+fi
+
+# Deleting website config
+echo "Deleting website config"
+rm "$AVAILABLEPATH"
