@@ -34,23 +34,23 @@ fi
 
 # Check HTTPS setting
 if [ "$HTTPS" == "true" ]; then
-	echo "HTTPS not supported, fall back to HTTP"
-	HTTPS="false"
+    echo "HTTPS not supported, fall back to HTTP"
+    HTTPS="false"
 fi
 
 # Get the config file
 if [ "$HTTPS" == "true" ]; then
-	CONFIGFILE=$WEBSITETYPE"_https.conf"
-	CONFIGDEFAULTFILE="default_https.conf"
+    CONFIGFILE=$WEBSITETYPE"_https.conf"
+    CONFIGDEFAULTFILE="default_https.conf"
 else
-	CONFIGFILE=$WEBSITETYPE"_http.conf"
-	CONFIGDEFAULTFILE="default_http.conf"
+    CONFIGFILE=$WEBSITETYPE"_http.conf"
+    CONFIGDEFAULTFILE="default_http.conf"
 fi
 
 # Check if the config file exists
 if [ ! -f "$CONFIGPATH/$CONFIGFILE" ]; then
-	echo "Website type not exists, fall back to default"
-	CONFIGFILE="$CONFIGDEFAULTFILE"
+    echo "Website type not exists, fall back to default"
+    CONFIGFILE="$CONFIGDEFAULTFILE"
 fi
 
 echo "$CONFIGPATH/$CONFIGFILE"
@@ -62,4 +62,3 @@ sed "s/WEBSITE/$WEBSITENAME/g" "$CONFIGPATH/$CONFIGFILE" > "/etc/nginx/sites-ava
 # Set the extension
 echo "Set the extension (.$EXTENSION)"
 sed -i -e "s/EXTENSION/$EXTENSION/g" "/etc/nginx/sites-available/$WEBSITENAME"
-
