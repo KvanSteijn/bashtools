@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Check the first argument
+if [ "$1" == "" ]; then
+    echo "Database name is empty"
+    exit
+fi
+
+# Set some values
+DATABASENAME="$1"
+
+# Get the username
+if [ "$2" == "" ]; then
+    USERNAME="$DATABASENAME"
+else
+    USERNAME="$2"
+fi
+
+echo "Drop user and database"
+mysql --defaults-file=/etc/mysql/debian.cnf --execute="DROP USER '$USERNAME'@'localhost';"
+mysql --defaults-file=/etc/mysql/debian.cnf --execute="DROP DATABASE IF EXISTS $DATABASENAME;"

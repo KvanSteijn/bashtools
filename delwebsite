@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Check the first argument
+if [ "$1" == "" ]; then
+    echo "Website name is empty"
+    exit
+fi
+
+# Set some values
+SCRIPTPATH=`pwd -P`
+WEBSITENAME="$1"
+
+# Deleting user
+echo "Deleting website"
+userdel "$WEBSITENAME"
+rm -rf "/home/$WEBSITENAME"
+
+# Deleting database
+./deldatabase "$WEBSITENAME"
+
+# Disable website config
+./disablewebsite "$WEBSITENAME"
+
+# Delete website config
+./delwebsiteconfig "$WEBSITENAME"
+
+# Deleting PHP-FPM pool
+echo "Deleting PHP-FPM pool"
+rm "/etc/php5/fpm/pool.d/$WEBSITENAME.conf"
