@@ -25,13 +25,14 @@ CONFIGFILE="/$EXIMPATH/$DOMAIN"
 INTERNMAIL="$2"
 TOMAIL="$3"
 
-# Check if the exim config not exists
+# Check if the Exim config not exists
 if [ ! -f "$CONFIGFILE" ]; then
-    echo "Create exim config for domain $DOMAIN"
+    echo "Create Exim config file for domain $DOMAIN"
     touch "$CONFIGFILE"
 else
-    echo "Exim config exists for domain $DOMAIN"
+    echo "Exim config file exists for domain $DOMAIN"
 fi
 
 # Add email address
+echo "Add address to Exim config file"
 echo "$INTERNMAIL $TOMAIL" >> "$CONFIGFILE"
