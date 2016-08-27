@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Check the first argument
+if [ "$1" == "" ]; then
+    echo "Domain name is empty"
+    exit
+fi
+
+# Check the seconds argument
+if [ "$2" == "" ]; then
+    echo "Intern address is empty"
+    exit
+fi
+
+# Check the third argument
+if [ "$3" == "" ]; then
+    echo "To address is empty"
+    exit
+fi
+
+# Set some values
+EXIMPATH="/etc/exim4/virtual"
+DOMAIN="$1"
+CONFIGFILE="/$EXIMPATH/$DOMAIN"
+INTERNMAIL="$2"
+TOMAIL="$3"
+
+# Check if the exim config not exists
+if [ ! -f "$CONFIGFILE" ]; then
+    echo "Create exim config for domain $DOMAIN"
+    touch "$CONFIGFILE"
+else
+    echo "Exim config exists for domain $DOMAIN"
+fi
+
+# Add email address
+echo "$INTERNMAIL $TOMAIL" >> "$CONFIGFILE"
