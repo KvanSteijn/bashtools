@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Check the first argument
+if [ "$1" == "" ]; then
+    echo "Domain name is empty"
+    exit
+fi
+
+# Check the seconds argument
+if [ "$2" == "" ]; then
+    echo "Intern address is empty"
+    exit
+fi
+
+# Set some values
+SCRIPTPATH=`pwd -P`
+EXIMPATH="/etc/exim4/virtual"
+DOMAIN="$1"
+CONFIGFILE="/$EXIMPATH/$DOMAIN"
+INTERNMAIL="$2"
+
+# Check the third argument
+if [ "$3" == "" ]; then
+    echo "Remove all intern addresses"
+    FIND="$INTERNMAIL"
+else
+    echo "Remove only specific addres"
+    FIND="$INTERNMAIL $3"
+fi
+
+# Find and replace
+sed -i ".bak" "$FIND" "$CONFIGFILE"
+
