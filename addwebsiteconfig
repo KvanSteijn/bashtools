@@ -8,7 +8,8 @@ fi
 
 # Set some values
 SCRIPTPATH=`pwd -P`
-CONFIGPATH="$SCRIPTPATH/configs/nginx"
+SCRIPTCONFIGPATH="$SCRIPTPATH/configs/nginx"
+NGINXCONFIGPATH="/etc/nginx/sites-available"
 WEBSITENAME="$1"
 
 # Get the extension
@@ -47,18 +48,23 @@ else
     CONFIGDEFAULTFILE="default_http.conf"
 fi
 
+# Check if Nginx config dir not exists; If not fall back to conf dir
+if [ ! -d "$NGINXCONFIGPATH" ]; then
+    NGINXCONFIGPATH="/etc/nginx/conf.d"
+fi
+
 # Check if the config file exists
-if [ ! -f "$CONFIGPATH/$CONFIGFILE" ]; then
+if [ ! -f "$SCRIPTCONFIGPATH/$CONFIGFILE" ]; then
     echo "Website type not exists, fall back to default"
     CONFIGFILE="$CONFIGDEFAULTFILE"
 fi
 
-echo "$CONFIGPATH/$CONFIGFILE"
+echo "$SCRIPTCONFIGPATH/$CONFIGFILE"
 
 # Create Nginx config
 echo "Creating Nginx config file"
-sed "s/WEBSITE/$WEBSITENAME/g" "$CONFIGPATH/$CONFIGFILE" > "/etc/nginx/sites-available/$WEBSITENAME"
+sed "s/WEBSITE/$WEBSITENAME/g" "$SCRIPTCONFIGPATH/$CONFIGFILE" > "$NGINXCONFIGPATH/$WEBSITENAME"
 
 # Set the extension
 echo "Set the extension (.$EXTENSION)"
-sed -i -e "s/EXTENSION/$EXTENSION/g" "/etc/nginx/sites-available/$WEBSITENAME"
+sed -i -e "s/EXTENSION/$EXTENSION/g" "$NGINXCONFIGPATH/$WEBSITENAME"
