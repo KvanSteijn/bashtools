@@ -29,5 +29,5 @@ else
 fi
 
 # Find and replace
-sed -i ".bak" "$FIND" "$CONFIGFILE"
-
+sed -i -e "s/$FIND//g" "$CONFIGFILE"
+sed -i -e '/^$/d' "$CONFIGFILE"
