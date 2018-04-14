@@ -63,13 +63,13 @@ echo "$SCRIPTCONFIGPATH/$CONFIGFILE"
 
 # Create Nginx config
 echo "Creating Nginx config file"
-sed "s/WEBSITE/$WEBSITENAME/g" "$SCRIPTCONFIGPATH/$CONFIGFILE" > "$NGINXCONFIGPATH/$WEBSITENAME"
+sed "s/WEBSITE/$WEBSITENAME/g" "$SCRIPTCONFIGPATH/$CONFIGFILE" > "$NGINXCONFIGPATH/$WEBSITENAME.conf"
 
 # Set extension
 echo "Set the extension (.$EXTENSION)"
-sed -i -e "s/EXTENSION/$EXTENSION/g" "$NGINXCONFIGPATH/$WEBSITENAME"
+sed -i -e "s/EXTENSION/$EXTENSION/g" "$NGINXCONFIGPATH/$WEBSITENAME.conf"
 
 # Set PHP version
 PHPVERSION=`php --version | head -n 1 | cut -d " " -f 2 | cut -c 1,3`
 echo "Set the PHP version ($PHPVERSION)"
-sed -i -e "s/PHPVERSION/$PHPVERSION/g" "$NGINXCONFIGPATH/$WEBSITENAME"
+sed -i -e "s/PHPVERSION/$PHPVERSION/g" "$NGINXCONFIGPATH/$WEBSITENAME.conf"
